@@ -20,7 +20,7 @@ app.post('/', function (req, res) {
     var endpoint = req.body.endpoint, method = req.body.method || 'GET', headers = req.body.headers || {};
 
     const child = spawnSync('curl', [endpoint, '-H', headers, '-X', method]);
-    
+
     if (child.stdout) {
         res.send(child.stdout)
     } else if (child.err) {
@@ -28,7 +28,7 @@ app.post('/', function (req, res) {
     } else {
         res.send(child.stderr)
     }
-    
+
     // fetch(endpoint, {
     //     method: method,
     //     headers: headers,
@@ -40,6 +40,6 @@ app.post('/', function (req, res) {
 })
 
 const server = http.createServer(app);
-const port = 3000;
+const port = 4567;
 server.listen(port);
 console.debug('Server listening on port ' + port);
