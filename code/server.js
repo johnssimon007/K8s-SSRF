@@ -41,6 +41,6 @@ app.post('/', function(req, res) {
 })
 app.use(express.static(__dirname + '/public'));
 const server = http.createServer(app);
-const port = 4560;
+const port = 4567;
 server.listen(port);
 console.debug('Server listening on port ' + port);
