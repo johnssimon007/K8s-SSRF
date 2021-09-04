@@ -1,44 +1,45 @@
 const http = require('http');
 const express = require('express');
 const path = require('path');
+var fs = require('fs'),
+  request = require('request');
 const bodyParser = require('body-parser');
-const { spawnSync} = require('child_process');
+var exec = require('child_process').exec;
 
 const app = express();
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static("express"));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.post('/', function (req, res) {
-    var endpoint = req.body.endpoint, method = req.body.method || 'GET', headers = req.body.headers || {};
+app.post('/', function(req, res) {
+  var endpoint = req.body.endpoint;
 
-    const child = spawnSync('curl', [endpoint, '-H', headers, '-X', method]);
+  var download = function(uri, filename, callback) {
+    request.get(uri, function(err, res, body) {
+      if (res.headers['content-type'] != 'image/jpeg') {
+        send_resp(res.body)
+      } else {
+        request(uri).pipe(fs.createWriteStream('public/' + filename)).on('close', callback);
+      }
+    });
+  };
 
-    if (child.stdout) {
-        res.send(child.stdout)
-    } else if (child.err) {
-        res.send(child.err)
-    } else {
-        res.send(child.stderr)
-    }
-
-    // fetch(endpoint, {
-    //     method: method,
-    //     headers: headers,
-    // })
-    //     .then(res => res.json())
-    //     .then(json => res.send(json))
-    //     .catch(json => res.send(json));
-    // res.sendFile(path.join(__dirname + '/express/index.html'))
+  function send_resp(body_val) {
+    res.send(body_val)
+  }
+  download(endpoint, 'test.png', function() {
+    console.log('done');
+    res.send('test.png')
+  });
 })
-
+app.use(express.static(__dirname + '/public'));
 const server = http.createServer(app);
 const port = 4567;
 server.listen(port);

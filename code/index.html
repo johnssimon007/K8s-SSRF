@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal API Proxy Service </title>
+    <title> </title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="h-full flex flex-col">
 
-    <header class="text-gray-700 body-font">
+    <header class="text-blue-700 body-font">
         <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row justify-center">
             <a class="flex title-font font-medium text-gray-900 mb-4 md:mb-0">
-                <span class="ml-3 text-xl">Internal API Proxy</span>
+                <span class="ml-3 text-xl">Fetch Images</span>
             </a>
         </div>
     </header>
@@ -33,15 +33,9 @@
                 <p class="font-semibold">Enter your endpoint: </p><br>
                 <input
                     class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal endpoint"
-                    type="text" placeholder="https://api.github.com" id="endpoint"><br><br>
+                    type="text" placeholder="https://google.com" id="endpoint"><br><br>
                 <p class="font-semibold">Method: </p><br>
-                <input
-                    class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal method"
-                    type="text" placeholder="GET" id="method"><br><br>
-                <p class="font-semibold">Custom Header: </p><br>
-                <input
-                    class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal header"
-                    type="text" placeholder="{ 'Content-Type': 'application/json' }" id="headers"><br><br>
+
 
                 <button
                     class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded submit-button"
@@ -56,7 +50,8 @@
                 <div class="rounded overflow-hidden shadow-lg">
                     <div class="px-6 py-4">
                         <div class="font-bold text-xl mb-2">Response Output</div>
-                        <p class="text-gray-700 text-base response">
+                        <p id="textContent" class="text-gray-700 text-base response">
+                          <img id="Og" width="300px" height="300px" src=""><img>
                         </p>
                     </div>
                 </div>
@@ -66,21 +61,13 @@
     </section>
 
 
-    <footer class="text-gray-700 body-font mt-auto">
-        <div class="container px-5 py-8 mx-auto flex justify-center sm:flex-row flex-col">
-            <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:py-2 sm:mt-0 mt-4">© Internal API Proxy -
-                <a href="https://madhuakula.com" class="text-gray-600 ml-1" rel="noopener noreferrer"
-                    target="_blank">Madhu Akula</a>
-            </p>
-        </div>
-    </footer>
+
 
     <script>
         const endpoint = document.querySelector('.endpoint');
         const method = document.querySelector('.method');
         const header = document.querySelector('.header');
         const submitButton = document.querySelector('.submit-button');
-        const response = document.querySelector('.response');
         submitButton.addEventListener('click', () => {
             fetch('/',{
                 method: "POST",
@@ -93,11 +80,14 @@
             })
             .then(data => data.text())
             .then(data => {
-                console.log(data)
-                response.textContent = JSON.stringify(data)
+                if(data!='test.png'){
+                   $("#textContent").html(data)
+                }
+                $("#Og").attr('src',data);
             })
         })
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>
 
